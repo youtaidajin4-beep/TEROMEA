@@ -404,6 +404,23 @@ export const lossRatioSimulation = {
   assumptions: ["高リスク群へ月1回のケア提案を配信", "中リスク群の記録継続率を15%改善", "早期相談により重症化前の受診を促進"]
 };
 
+/** BtoBダッシュボード上部「この画面で分かること」用（モック文言） */
+export const insurerDashboardInsights = [
+  "どのペットが将来の保険金支払いリスクになりやすいか",
+  "どの契約者に予防ケアを届けるべきか",
+  "予防介入によって、どれくらい損害率改善が見込めるか"
+] as const;
+
+/** 保険会社が導入したときの業務フロー（デモ用） */
+export const insurerOnboardingSteps = [
+  "契約者にテロメア検査キットを配布",
+  "飼い主がペット情報を登録",
+  "検査結果と日々の記録をアプリで管理",
+  "高リスクペットを自動抽出",
+  "食事・運動・通院相談を促す",
+  "通院回数・請求リスク・損害率の変化を確認"
+] as const;
+
 export function getPetById(id: string) {
   return pets.find((pet) => pet.id === id);
 }

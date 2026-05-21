@@ -9,31 +9,13 @@ import {
   getRiskLabel,
   getRiskTone,
   hospitalVisitTrend,
+  insurerDashboardInsights,
+  insurerOnboardingSteps,
   lossRatioSimulation
 } from "@/lib/mockData";
 
-// #region agent log
-let debugDashboardRenders = 0;
-function agentDebugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>) {
-  fetch("http://127.0.0.1:7533/ingest/604d9eab-aa28-449e-a6d2-2c9ef3130568", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "090859" },
-    body: JSON.stringify({ sessionId: "090859", runId, hypothesisId, location, message, data, timestamp: Date.now() })
-  }).catch(() => {});
-}
-// #endregion
-
 export function ClientInsuranceDashboard() {
   const allPets = useLocalPets();
-  // #region agent log
-  debugDashboardRenders += 1;
-  if (debugDashboardRenders <= 10) {
-    agentDebugLog("pre-fix", "H5", "src/components/ClientInsuranceDashboard.tsx:render", "insurance dashboard render", {
-      renders: debugDashboardRenders,
-      allPetsLength: allPets.length
-    });
-  }
-  // #endregion
 
   const averageScore = Math.round(allPets.reduce((sum, pet) => sum + pet.telomereScore, 0) / Math.max(allPets.length, 1));
   const highRiskCount = allPets.filter((pet) => pet.riskLevel === "high").length;
@@ -88,6 +70,37 @@ export function ClientInsuranceDashboard() {
           テロメアスコアと日々の健康記録を使い、高リスク化する前の生活改善を支援するBtoB向け管理画面です。
           このデモでは、飼い主が追加したペットも集計に含めます。
         </p>
+      </section>
+
+      <section className="rounded-[2rem] bg-white p-6 shadow-soft md:p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf">At a glance</p>
+        <h2 className="mt-2 text-2xl font-bold text-ink md:text-3xl">この画面で分かること</h2>
+        <ul className="mt-5 space-y-4 text-base leading-7 text-slate-700 md:text-lg">
+          {insurerDashboardInsights.map((line) => (
+            <li key={line} className="flex gap-3">
+              <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-leaf" aria-hidden />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-[2rem] border border-emerald-100 bg-mint/60 p-6 shadow-soft md:p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf">Onboarding</p>
+        <h2 className="mt-2 text-2xl font-bold text-ink md:text-3xl">保険会社導入フロー</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-base">
+          導入後の業務の流れをイメージしやすくするためのデモです。実運用では契約・個人情報の取り扱いに合わせて調整します。
+        </p>
+        <ol className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {insurerOnboardingSteps.map((step, index) => (
+            <li key={step} className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-leaf text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <p className="text-sm font-semibold leading-6 text-ink">{step}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <Notice />

@@ -4,7 +4,24 @@ import { useState } from "react";
 import { Notice } from "@/components/Notice";
 import { RiskBadge } from "@/components/RiskBadge";
 import { ScoreRing } from "@/components/ScoreRing";
-import { aiAdviceByPet, pets } from "@/lib/mockData";
+import { aiAdviceByPet, pets, type Pet } from "@/lib/mockData";
+
+function getDailyWarmLine(pet: Pet): string {
+  if (pet.trend === "improving") {
+    return `記録を見ると、昨日より元気度が少し安定していそうです。${pet.lastLogSummary}`;
+  }
+  if (pet.trend === "stable") {
+    return `いつものペースを保てていて、よい見守りが続いています。${pet.lastLogSummary}`;
+  }
+  return `今日はいつもよりそっと見守りたい日かもしれません。${pet.lastLogSummary}`;
+}
+
+function getDailyActionLine(pet: Pet): string {
+  if (pet.type === "dog" && pet.trend !== "watch") {
+    return `今日は暑くなりそうなので、朝のうちに10分だけ長めに歩いてみましょう。${pet.recommendedAction}`;
+  }
+  return pet.recommendedAction;
+}
 
 export function AdviceClient() {
   const [selectedPetId, setSelectedPetId] = useState(pets[0].id);
@@ -52,20 +69,29 @@ export function AdviceClient() {
           </div>
         </aside>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          {[
-            ["食事改善", advice.meal, "体重・食事メモから、続けやすい調整を優先します。"],
-            ["運動改善", advice.exercise, "直近の活動量と年齢に合わせて、無理のない量にしています。"],
-            ["動物病院に相談する目安", advice.hospital, "病気の断定ではなく、変化が続く時の相談タイミングです。"],
-            ["次回検査の提案", advice.nextTest, "生活記録と検査結果を一緒に見直すための目安です。"]
-          ].map(([title, text, why]) => (
-            <article key={title} className="rounded-3xl bg-white p-6 shadow-soft">
-              <p className="text-sm font-semibold text-leaf">{title}</p>
-              <p className="mt-3 leading-7 text-slate-600">{text}</p>
-              <p className="mt-4 rounded-2xl bg-cream px-4 py-3 text-sm font-semibold text-slate-600">理由: {why}</p>
-            </article>
-          ))}
-        </section>
+        <div className="space-y-4">
+          <article className="rounded-[2rem] border border-emerald-100 bg-gradient-to-br from-mint to-white p-6 shadow-soft md:p-8">
+            <p className="text-sm font-bold uppercase tracking-[0.15em] text-leaf">Today</p>
+            <h2 className="mt-2 text-2xl font-bold text-ink md:text-3xl">今日の{pet.name}ちゃん</h2>
+            <p className="mt-4 text-base font-semibold leading-8 text-ink md:text-lg">{getDailyWarmLine(pet)}</p>
+            <p className="mt-4 rounded-2xl bg-white/90 px-4 py-4 text-sm leading-7 text-slate-700 md:text-base">{getDailyActionLine(pet)}</p>
+          </article>
+
+          <section className="grid gap-4 md:grid-cols-2">
+            {[
+              ["食事改善", advice.meal, "体重・食事メモから、続けやすい調整を優先します。"],
+              ["運動改善", advice.exercise, "直近の活動量と年齢に合わせて、無理のない量にしています。"],
+              ["動物病院に相談する目安", advice.hospital, "病気の断定ではなく、変化が続く時の相談タイミングです。"],
+              ["次回検査の提案", advice.nextTest, "生活記録と検査結果を一緒に見直すための目安です。"]
+            ].map(([title, text, why]) => (
+              <article key={title} className="rounded-3xl bg-white p-6 shadow-soft">
+                <p className="text-sm font-semibold text-leaf">{title}</p>
+                <p className="mt-3 leading-7 text-slate-600">{text}</p>
+                <p className="mt-4 rounded-2xl bg-cream px-4 py-3 text-sm font-semibold text-slate-600">理由: {why}</p>
+              </article>
+            ))}
+          </section>
+        </div>
       </div>
     </div>
   );

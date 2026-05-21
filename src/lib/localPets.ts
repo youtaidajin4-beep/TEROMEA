@@ -2,19 +2,6 @@ import { pets, type Pet, type PetType, type RiskLevel } from "./mockData";
 
 export const LOCAL_PETS_KEY = "pet-life-score:local-pets";
 
-// #region agent log
-let debugSnapshotCalls = 0;
-let debugSubscribeCalls = 0;
-let debugLastSnapshot: Pet[] | undefined;
-function agentDebugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>) {
-  fetch("http://127.0.0.1:7533/ingest/604d9eab-aa28-449e-a6d2-2c9ef3130568", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "090859" },
-    body: JSON.stringify({ sessionId: "090859", runId, hypothesisId, location, message, data, timestamp: Date.now() })
-  }).catch(() => {});
-}
-// #endregion
-
 let cachedLocalPetsRaw: string | null | undefined;
 let cachedClientPetsSnapshot: Pet[] = pets;
 
@@ -50,25 +37,10 @@ export function getAllClientPets() {
 }
 
 export function subscribeLocalPets(callback: () => void) {
-  // #region agent log
-  debugSubscribeCalls += 1;
-  if (debugSubscribeCalls <= 8) {
-    agentDebugLog("pre-fix", "H3", "src/lib/localPets.ts:subscribeLocalPets", "subscribeLocalPets called", {
-      subscribeCalls: debugSubscribeCalls
-    });
-  }
-  // #endregion
   window.addEventListener("pet-life-score:local-pets-updated", callback);
   window.addEventListener("storage", callback);
 
   return () => {
-    // #region agent log
-    if (debugSubscribeCalls <= 8) {
-      agentDebugLog("pre-fix", "H3", "src/lib/localPets.ts:subscribeLocalPets.cleanup", "subscribeLocalPets cleanup", {
-        subscribeCalls: debugSubscribeCalls
-      });
-    }
-    // #endregion
     window.removeEventListener("pet-life-score:local-pets-updated", callback);
     window.removeEventListener("storage", callback);
   };
@@ -88,27 +60,10 @@ export function getClientPetsSnapshot() {
   }
 
   const snapshot = cachedClientPetsSnapshot;
-  // #region agent log
-  debugSnapshotCalls += 1;
-  if (debugSnapshotCalls <= 12) {
-    agentDebugLog("pre-fix", "H1,H2", "src/lib/localPets.ts:getClientPetsSnapshot", "client snapshot generated", {
-      snapshotCalls: debugSnapshotCalls,
-      sameReferenceAsPrevious: debugLastSnapshot === snapshot,
-      length: snapshot.length,
-      localLength: snapshot.length - pets.length
-    });
-  }
-  debugLastSnapshot = snapshot;
-  // #endregion
   return snapshot;
 }
 
 export function getServerPetsSnapshot() {
-  // #region agent log
-  agentDebugLog("pre-fix", "H4", "src/lib/localPets.ts:getServerPetsSnapshot", "server snapshot returned", {
-    length: pets.length
-  });
-  // #endregion
   return pets;
 }
 

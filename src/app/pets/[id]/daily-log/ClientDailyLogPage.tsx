@@ -6,30 +6,9 @@ import { useLocalPets } from "@/lib/useLocalPets";
 import { getLogsByPetId } from "@/lib/mockData";
 import { DailyLogForm } from "./DailyLogForm";
 
-// #region agent log
-let debugDailyLogRenders = 0;
-function agentDebugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>) {
-  fetch("http://127.0.0.1:7533/ingest/604d9eab-aa28-449e-a6d2-2c9ef3130568", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "090859" },
-    body: JSON.stringify({ sessionId: "090859", runId, hypothesisId, location, message, data, timestamp: Date.now() })
-  }).catch(() => {});
-}
-// #endregion
-
 export function ClientDailyLogPage({ id }: { id: string }) {
   const allPets = useLocalPets();
   const pet = allPets.find((item) => item.id === id);
-  // #region agent log
-  debugDailyLogRenders += 1;
-  if (debugDailyLogRenders <= 10) {
-    agentDebugLog("pre-fix", "H5", "src/app/pets/[id]/daily-log/ClientDailyLogPage.tsx:render", "daily log page render", {
-      renders: debugDailyLogRenders,
-      allPetsLength: allPets.length,
-      hasPet: Boolean(pet)
-    });
-  }
-  // #endregion
 
   if (!pet) {
     return (

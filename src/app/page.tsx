@@ -51,11 +51,36 @@ export default function Home() {
   return (
     <div className="space-y-16">
       <section className="overflow-hidden rounded-[2.5rem] bg-white/80 shadow-soft">
+        <div className="space-y-6 border-b border-slate-100 p-6 md:p-10 lg:p-12">
+          <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-stretch">
+            <div className="rounded-[1.75rem] bg-ink p-6 text-white shadow-soft md:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">For insurers</p>
+              <p className="mt-3 text-xl font-bold leading-snug md:text-2xl">
+                ペット保険会社の損害率を下げる、予防型ヘルスケアMVP
+              </p>
+              <p className="mt-4 text-sm leading-7 text-emerald-50/90 md:text-base">
+                テロメア検査 × 日々の健康記録 × AI介入で、通院リスクの高いペットを早期に見つける。
+              </p>
+              <Link
+                href="/insurance-dashboard"
+                className="mt-5 inline-flex text-sm font-bold text-emerald-200 underline-offset-4 hover:text-white hover:underline"
+              >
+                導入フローとダッシュボードはこちら
+              </Link>
+            </div>
+            <div className="flex flex-col justify-center rounded-[1.75rem] bg-mint p-6 md:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-leaf">For owners</p>
+              <p className="mt-3 text-lg font-bold leading-snug text-ink md:text-xl">
+                うちの子の健康年齢を見える化し、毎日のケアにつなげるアプリ
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="grid gap-8 p-6 md:grid-cols-[1.05fr_0.95fr] md:p-10 lg:p-12">
           <div className="flex flex-col justify-center space-y-8">
             <div className="space-y-5">
               <p className="inline-flex w-fit rounded-full bg-mint px-4 py-2 text-sm font-bold text-leaf">
-                ペットの健康寿命を伸ばす予防型ケアサービス
+                Pet Life Score
               </p>
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight text-ink md:text-6xl">
@@ -64,8 +89,7 @@ export default function Home() {
                   うちの子の未来を、毎日のケアへ。
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-                  Pet Life Score は、ペットのDNA・テロメア検査結果をもとに健康状態をスコア化し、
-                  飼い主の生活改善と保険会社の予防介入をつなぐ、健康管理サービスのMVPです。
+                  DNA・テロメアと生活記録をつなぎ、飼い主の安心と保険会社の予防介入を同じデータ上で進めるMVPです。
                 </p>
               </div>
             </div>
