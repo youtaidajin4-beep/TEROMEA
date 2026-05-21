@@ -1,6 +1,22 @@
 import { pets, type Pet, type PetType, type RiskLevel } from "./mockData";
 
-export const LOCAL_PETS_KEY = "pet-life-score:local-pets";
+const LEGACY_LOCAL_PETS_KEY = "pet-life-score:local-pets";
+const LEGACY_LOCAL_PETS_EVENT = "pet-life-score:local-pets-updated";
+
+export const LOCAL_PETS_KEY = "zutto-petto:local-pets";
+export const LOCAL_PETS_UPDATED_EVENT = "zutto-petto:local-pets-updated";
+
+function migrateLegacyLocalPetsIfNeeded() {
+  if (typeof window === "undefined") {
+    return;
+  }
+  if (!window.localStorage.getItem(LOCAL_PETS_KEY)) {
+    const legacy = window.localStorage.getItem(LEGACY_LOCAL_PETS_KEY);
+    if (legacy) {
+      window.localStorage.setItem(LOCAL_PETS_KEY, legacy);
+    }
+  }
+}
 
 let cachedLocalPetsRaw: string | null | undefined;
 let cachedClientPetsSnapshot: Pet[] = pets;
@@ -21,6 +37,7 @@ export function getLocalPets(): Pet[] {
   }
 
   try {
+    migrateLegacyLocalPetsIfNeeded();
     const stored = window.localStorage.getItem(LOCAL_PETS_KEY);
     return stored ? (JSON.parse(stored) as Pet[]) : [];
   } catch {
@@ -37,16 +54,21 @@ export function getAllClientPets() {
 }
 
 export function subscribeLocalPets(callback: () => void) {
-  window.addEventListener("pet-life-score:local-pets-updated", callback);
+  window.addEventListener(LOCAL_PETS_UPDATED_EVENT, callback);
+  window.addEventListener(LEGACY_LOCAL_PETS_EVENT, callback);
   window.addEventListener("storage", callback);
 
   return () => {
-    window.removeEventListener("pet-life-score:local-pets-updated", callback);
+    window.removeEventListener(LOCAL_PETS_UPDATED_EVENT, callback);
+    window.removeEventListener(LEGACY_LOCAL_PETS_EVENT, callback);
     window.removeEventListener("storage", callback);
   };
 }
 
 export function getClientPetsSnapshot() {
+  if (typeof window !== "undefined") {
+    migrateLegacyLocalPetsIfNeeded();
+  }
   const stored = typeof window === "undefined" ? null : window.localStorage.getItem(LOCAL_PETS_KEY);
 
   if (!stored) {
@@ -75,7 +97,7 @@ export function addLocalPet(input: PetProfileInput) {
   const newPet = createPetFromProfile(input);
   const currentPets = getLocalPets();
   saveLocalPets([newPet, ...currentPets]);
-  window.dispatchEvent(new Event("pet-life-score:local-pets-updated"));
+  window.dispatchEvent(new Event(LOCAL_PETS_UPDATED_EVENT));
   return newPet;
 }
 

@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pet Life Score | ペットの健康寿命を伸ばす予防型ケアサービス",
-  description: "ペットのDNA・テロメア検査結果を毎日の健康管理と予防型ペット保険体験につなげるMVPデモ"
+  title: "Zutto Petto | ペットの健康寿命を伸ばす予防型ケアサービス",
+  description: "Zutto Petto — ペットのDNA・テロメア検査結果を毎日の健康管理と予防型ペット保険体験につなげるMVPデモ"
 };
 
 const navItems = [
@@ -22,10 +22,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <nav className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
             <Link href="/" className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-leaf text-lg font-bold text-white">
-                P
+                Z
               </span>
               <div>
-                <p className="text-lg font-bold leading-tight text-ink">Pet Life Score</p>
+                <p className="text-lg font-bold leading-tight text-ink">Zutto Petto</p>
                 <p className="text-xs text-slate-500">検査を毎日のケアへ</p>
               </div>
             </Link>

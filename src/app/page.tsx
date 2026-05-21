@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex flex-col justify-center space-y-8">
             <div className="space-y-5">
               <p className="inline-flex w-fit rounded-full bg-mint px-4 py-2 text-sm font-bold text-leaf">
-                Pet Life Score
+                Zutto Petto
               </p>
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight text-ink md:text-6xl">
@@ -89,7 +89,7 @@ export default function Home() {
                   うちの子の未来を、毎日のケアへ。
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-                  DNA・テロメアと生活記録をつなぎ、飼い主の安心と保険会社の予防介入を同じデータ上で進めるMVPです。
+                  Zutto Petto は、DNA・テロメアと生活記録をつなぎ、飼い主の安心と保険会社の予防介入を同じデータ上で進めるMVPです。
                 </p>
               </div>
             </div>
@@ -155,10 +155,10 @@ export default function Home() {
 
       <section className="space-y-6">
         <div className="max-w-3xl space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf">Why Pet Life Score</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf">Why Zutto Petto</p>
           <h2 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">ペット保険を「支払う保険」から「元気を続ける体験」へ</h2>
           <p className="leading-7 text-slate-600">
-            一般的なペット保険は、病気やケガが起きた後の補償が中心です。Pet Life Score は、検査と日々の記録から予防ケアの接点を作り、
+            一般的なペット保険は、病気やケガが起きた後の補償が中心です。Zutto Petto は、検査と日々の記録から予防ケアの接点を作り、
             飼い主の安心と保険会社のリスク改善を同時に目指します。
           </p>
         </div>
@@ -282,10 +282,10 @@ export default function Home() {
       <section className="rounded-[2.5rem] bg-leaf p-6 text-white shadow-soft md:p-10">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
           <div className="space-y-3">
-            <p className="text-sm font-semibold text-emerald-100">Start Pet Life Score</p>
+            <p className="text-sm font-semibold text-emerald-100">Start Zutto Petto</p>
             <h2 className="text-3xl font-bold md:text-4xl">うちの子の健康を、今日から見える化する。</h2>
             <p className="max-w-2xl leading-7 text-emerald-50">
-              飼い主向け体験と保険会社向けダッシュボードの両方を、このMVPで確認できます。
+              飼い主向け体験と保険会社向けダッシュボードの両方を、Zutto Petto のMVPで確認できます。
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
