@@ -9,6 +9,16 @@
 /** 認証不要の公開ルート（middleware・デプロイ設定の参考用） */
 export const HEALTH_CHECK_PUBLIC_PATH_PREFIX = "/health-check";
 
+/**
+ * 本番公開URL（LINE公式アカウントに設定するURL）
+ * Preview Deployment URL ではなく、必ず Production URL を使用してください。
+ */
+export const HEALTH_CHECK_PUBLIC_URL =
+  process.env.NEXT_PUBLIC_HEALTH_CHECK_URL ?? "https://teromea.vercel.app/health-check";
+
+/** Production ドメイン（Vercel） */
+export const HEALTH_CHECK_PRODUCTION_DOMAIN = "teromea.vercel.app";
+
 /** localStorage キー（将来 Firebase / Supabase 移行時も名前空間を統一） */
 export const HEALTH_CHECK_STORAGE_KEY = "zutto-petto:health-check";
 export const HEALTH_CHECK_DRAFT_KEY = "zutto-petto:health-check-draft";

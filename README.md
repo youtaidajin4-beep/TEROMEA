@@ -45,10 +45,22 @@ npm run dev
 - 将来 Firebase / Supabase へ移行しやすいよう、データ構造とストレージ層を分離（`src/lib/healthCheckStorage.ts`）
 - LINE CTA の URL は `.env` の `NEXT_PUBLIC_LINE_OFFICIAL_URL` で差し替え可能
 
-**LINE公式アカウントに設定するURL例:**
+**LINE公式アカウントに設定するURL（Production）:**
 
 ```
-https://your-domain.com/health-check
+https://teromea.vercel.app/health-check
+```
+
+**重要（Vercel設定）:**
+
+- Preview Deployment URL（`teromea-xxxxx.vercel.app` 形式）は LINE に設定しないでください
+- Vercel Dashboard → Project `teromea` → Settings → Deployment Protection で **Vercel Authentication を無効**にしてください
+- 本番URLは上記 Production URL のみを使用してください
+
+**診断フロー（ログイン不要）:**
+
+```
+LINE公式 → /health-check → /health-check/form → /health-check/result
 ```
 
 ## 事業説明
