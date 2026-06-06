@@ -20,11 +20,11 @@ export function HealthCheckPrimaryButton({
   pulse = false,
   type = "button"
 }: HealthCheckPrimaryButtonProps) {
-  const baseClass = `flex w-full items-center justify-center rounded-full px-6 py-4 text-base font-bold text-white shadow-card transition ${
+  const baseClass = `flex w-full items-center justify-center rounded-full px-6 py-4 text-base font-bold text-white shadow-card transition hover:scale-[1.02] active:scale-[0.98] ${
     variant === "accent"
-      ? "bg-accent hover:bg-orange-600 disabled:bg-orange-200"
-      : "bg-leaf hover:bg-emerald-700 disabled:bg-emerald-200"
-  } ${pulse ? "animate-pulseSoft" : ""} disabled:cursor-not-allowed`;
+      ? "bg-gradient-to-r from-accent to-orange-500 hover:from-orange-600 hover:to-orange-600 disabled:from-orange-200 disabled:to-orange-200"
+      : "bg-gradient-to-r from-leaf to-emerald-600 hover:from-emerald-700 hover:to-emerald-700 disabled:from-emerald-200 disabled:to-emerald-300"
+  } ${pulse ? "animate-pulseSoft" : ""} disabled:cursor-not-allowed disabled:hover:scale-100`;
 
   if (href) {
     return (

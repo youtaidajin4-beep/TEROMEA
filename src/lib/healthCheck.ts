@@ -1,15 +1,19 @@
 import { generateHealthCheckInsight, type HealthCheckInsight } from "./healthCheckInsights";
+import {
+  HEALTH_CHECK_DRAFT_KEY,
+  HEALTH_CHECK_STORAGE_KEY,
+  HEALTH_CHECK_UPDATED_EVENT,
+  LINE_OFFICIAL_URL
+} from "./healthCheckConfig";
 import type { HealthCheckFieldId } from "./healthCheckQuestions";
 
 export type { HealthCheckInsight };
-
-export const HEALTH_CHECK_STORAGE_KEY = "zutto-petto:health-check";
-export const HEALTH_CHECK_DRAFT_KEY = "zutto-petto:health-check-draft";
-export const HEALTH_CHECK_UPDATED_EVENT = "zutto-petto:health-check-updated";
-
-/** LINE公式アカウントURL（後で差し替え） */
-export const LINE_OFFICIAL_URL =
-  process.env.NEXT_PUBLIC_LINE_OFFICIAL_URL ?? "https://line.me/R/ti/p/@placeholder";
+export {
+  HEALTH_CHECK_DRAFT_KEY,
+  HEALTH_CHECK_STORAGE_KEY,
+  HEALTH_CHECK_UPDATED_EVENT,
+  LINE_OFFICIAL_URL
+};
 
 export type Species = "dog" | "cat";
 export type BodyType = "thin" | "normal" | "slightly_overweight" | "overweight";
@@ -195,104 +199,4 @@ export function buildHealthCheckResult(input: HealthCheckInput): HealthCheckResu
     telomereMessage: getTelomereInterestMessage(input.telomereInterest),
     completedAt: new Date().toISOString()
   };
-}
-
-/** 旧形式の localStorage データを新形式に補完 */
-function normalizeHealthCheckResult(raw: HealthCheckResult): HealthCheckResult {
-  if (raw.insight) return raw;
-
-  const score = raw.score ?? calculateHealthScore(raw.input);
-  return {
-    ...raw,
-    score,
-    typeLabel: raw.typeLabel ?? getScoreType(score),
-    insight: generateHealthCheckInsight(raw.input, score),
-    telomereMessage: raw.telomereMessage ?? getTelomereInterestMessage(raw.input.telomereInterest)
-  };
-}
-
-export function saveHealthCheckResult(input: HealthCheckInput): HealthCheckResult {
-  const result = buildHealthCheckResult(input);
-
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem(HEALTH_CHECK_STORAGE_KEY, JSON.stringify(result));
-    invalidateHealthCheckSnapshotCache();
-    window.dispatchEvent(new Event(HEALTH_CHECK_UPDATED_EVENT));
-  }
-
-  return result;
-}
-
-let healthCheckSnapshotCache: { raw: string | null; snapshot: HealthCheckResult | null } | undefined;
-
-function invalidateHealthCheckSnapshotCache() {
-  healthCheckSnapshotCache = undefined;
-}
-
-/** useSyncExternalStore 用：同一データなら同じ参照を返す */
-export function getHealthCheckResultSnapshot(): HealthCheckResult | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    const raw = window.localStorage.getItem(HEALTH_CHECK_STORAGE_KEY);
-
-    if (healthCheckSnapshotCache && healthCheckSnapshotCache.raw === raw) {
-      return healthCheckSnapshotCache.snapshot;
-    }
-
-    const parsed = raw ? normalizeHealthCheckResult(JSON.parse(raw) as HealthCheckResult) : null;
-    healthCheckSnapshotCache = { raw, snapshot: parsed };
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-export function subscribeHealthCheckResult(callback: () => void) {
-  if (typeof window === "undefined") {
-    return () => {};
-  }
-
-  const handleUpdate = () => {
-    invalidateHealthCheckSnapshotCache();
-    callback();
-  };
-
-  window.addEventListener(HEALTH_CHECK_UPDATED_EVENT, handleUpdate);
-  window.addEventListener("storage", handleUpdate);
-
-  return () => {
-    window.removeEventListener(HEALTH_CHECK_UPDATED_EVENT, handleUpdate);
-    window.removeEventListener("storage", handleUpdate);
-  };
-}
-
-export function getLatestHealthCheckResult(): HealthCheckResult | null {
-  return getHealthCheckResultSnapshot();
-}
-
-export function hasHealthCheckResult(): boolean {
-  return getLatestHealthCheckResult() !== null;
-}
-
-/** フォーム途中入力の保存（sessionStorage） */
-export function saveHealthCheckDraft(form: HealthCheckFormState, step: number) {
-  if (typeof window === "undefined") return;
-  window.sessionStorage.setItem(HEALTH_CHECK_DRAFT_KEY, JSON.stringify({ form, step }));
-}
-
-export function getHealthCheckDraft(): { form: HealthCheckFormState; step: number } | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    const stored = window.sessionStorage.getItem(HEALTH_CHECK_DRAFT_KEY);
-    return stored ? (JSON.parse(stored) as { form: HealthCheckFormState; step: number }) : null;
-  } catch {
-    return null;
-  }
-}
-
-export function clearHealthCheckDraft() {
-  if (typeof window === "undefined") return;
-  window.sessionStorage.removeItem(HEALTH_CHECK_DRAFT_KEY);
 }

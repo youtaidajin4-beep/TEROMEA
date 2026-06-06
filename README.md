@@ -25,6 +25,9 @@ npm run dev
 ## 主な画面
 
 - `/`: 飼い主向けホーム
+- `/health-check`: **うちの子健康寿命チェック（公式LINE向け・ログイン不要）**
+- `/health-check/form`: 診断フォーム（11問・ステップ形式）
+- `/health-check/result`: 診断結果（localStorage に保存）
 - `/pets`: ペット一覧
 - `/pets/new`: うちの子プロフィール登録
 - `/pets/[id]`: ペット詳細
@@ -32,6 +35,21 @@ npm run dev
 - `/pets/[id]/daily-log`: 毎日の健康記録
 - `/advice`: AI健康アドバイス
 - `/insurance-dashboard`: 保険会社向け管理画面
+
+## 健康寿命チェック（公式LINE向け MVP）
+
+公式LINEからの流入を前提とした、**ログイン不要**の簡易診断フローです。
+
+- **Googleログインは使用しません**（LINE内ブラウザ・Instagram内ブラウザでの OAuth エラーを回避）
+- 入力 → 結果表示までは **localStorage** のみで完結
+- 将来 Firebase / Supabase へ移行しやすいよう、データ構造とストレージ層を分離（`src/lib/healthCheckStorage.ts`）
+- LINE CTA の URL は `.env` の `NEXT_PUBLIC_LINE_OFFICIAL_URL` で差し替え可能
+
+**LINE公式アカウントに設定するURL例:**
+
+```
+https://your-domain.com/health-check
+```
 
 ## 事業説明
 

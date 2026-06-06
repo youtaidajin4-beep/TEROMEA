@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type HealthCheckSectionCardProps = {
   title?: string;
@@ -6,6 +6,7 @@ type HealthCheckSectionCardProps = {
   children: ReactNode;
   variant?: "default" | "highlight" | "accent";
   className?: string;
+  style?: CSSProperties;
 };
 
 const variantStyles = {
@@ -19,10 +20,14 @@ export function HealthCheckSectionCard({
   eyebrow,
   children,
   variant = "default",
-  className = ""
+  className = "",
+  style
 }: HealthCheckSectionCardProps) {
   return (
-    <section className={`rounded-[1.75rem] border p-6 shadow-card backdrop-blur-sm ${variantStyles[variant]} ${className}`}>
+    <section
+      className={`rounded-[1.75rem] border p-6 shadow-card backdrop-blur-sm ${variantStyles[variant]} ${className}`}
+      style={style}
+    >
       {eyebrow ? <p className="text-xs font-semibold uppercase tracking-[0.12em] text-leaf">{eyebrow}</p> : null}
       {title ? <h2 className={`font-serif text-lg font-bold text-navy ${eyebrow ? "mt-2" : ""}`}>{title}</h2> : null}
       <div className={title || eyebrow ? "mt-4" : ""}>{children}</div>

@@ -10,10 +10,10 @@ export function HealthCheckChoiceCard({ label, selected, onClick, icon }: Health
     <button
       type="button"
       onClick={onClick}
-      className={`group flex min-h-[56px] w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-200 ${
+      className={`group flex min-h-[56px] w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-200 active:scale-[0.98] ${
         selected
           ? "border-leaf bg-mint/80 text-navy shadow-card ring-2 ring-leaf/20"
-          : "border-slate-100/80 bg-white/90 text-slate-700 hover:border-leaf/30 hover:bg-beige/50"
+          : "border-slate-100/80 bg-white/90 text-slate-700 hover:border-leaf/30 hover:bg-beige/50 hover:shadow-sm"
       }`}
     >
       {icon ? (

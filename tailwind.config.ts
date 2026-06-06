@@ -28,7 +28,12 @@ const config: Config = {
       animation: {
         fadeSlide: "fadeSlide 0.35s ease-out",
         scoreReveal: "scoreReveal 0.6s ease-out",
-        pulseSoft: "pulseSoft 2.5s ease-in-out infinite"
+        pulseSoft: "pulseSoft 2.5s ease-in-out infinite",
+        float: "float 6s ease-in-out infinite",
+        shimmer: "shimmer 2.5s linear infinite",
+        popIn: "popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards",
+        staggerIn: "staggerIn 0.6s ease-out forwards",
+        glow: "glow 2s ease-in-out infinite"
       },
       keyframes: {
         fadeSlide: {
@@ -42,6 +47,26 @@ const config: Config = {
         pulseSoft: {
           "0%, 100%": { boxShadow: "0 0 0 0 rgba(224, 122, 58, 0.3)" },
           "50%": { boxShadow: "0 0 0 8px rgba(224, 122, 58, 0)" }
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" }
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" }
+        },
+        popIn: {
+          "0%": { opacity: "0", transform: "scale(0.8)" },
+          "100%": { opacity: "1", transform: "scale(1)" }
+        },
+        staggerIn: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" }
+        },
+        glow: {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" }
         }
       }
     }
