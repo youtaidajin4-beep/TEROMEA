@@ -1,4 +1,5 @@
 import { HealthCheckDisclaimer } from "@/components/HealthCheckDisclaimer";
+import { HealthCheckLogo } from "@/components/health-check/HealthCheckLogo";
 import { HealthCheckMysteryPreview } from "@/components/health-check/HealthCheckMysteryPreview";
 import { HealthCheckPrimaryButton } from "@/components/health-check/HealthCheckPrimaryButton";
 import { HealthCheckSectionCard } from "@/components/health-check/HealthCheckSectionCard";
@@ -13,15 +14,13 @@ export default function HealthCheckTopPage() {
   return (
     <div className="space-y-8 pb-8">
       <section className="animate-fadeSlide space-y-5 text-center">
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <p className="inline-flex rounded-full bg-mint/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-leaf">
-            無料 · 約1分
-          </p>
-          <p className="inline-flex rounded-full bg-beige px-4 py-1.5 text-xs font-semibold tracking-wide text-navy">
-            ログイン不要
-          </p>
+        <div className="flex justify-center">
+          <HealthCheckLogo variant="hero" priority />
         </div>
-        <h1 className="font-serif text-3xl font-bold leading-tight text-navy md:text-4xl">
+        <p className="inline-flex rounded-full bg-mint/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-leaf">
+          無料 · 約1分
+        </p>
+        <h1 className="font-serif text-2xl font-bold leading-tight text-navy md:text-3xl">
           うちの子の健康寿命を、
           <br />
           <span className="bg-gradient-to-r from-leaf to-emerald-600 bg-clip-text text-transparent">
@@ -41,7 +40,10 @@ export default function HealthCheckTopPage() {
         <div className="grid gap-4">
           {flowSteps.map((step, index) => (
             <div key={step.title} className="flex items-start gap-4">
-              <span className="flex h-12 w-12 shrink-0 animate-float items-center justify-center rounded-2xl bg-white text-xl shadow-sm" style={{ animationDelay: `${index * 0.5}s` }}>
+              <span
+                className="flex h-12 w-12 shrink-0 animate-float items-center justify-center rounded-2xl bg-white text-xl shadow-sm"
+                style={{ animationDelay: `${index * 0.5}s` }}
+              >
                 {step.icon}
               </span>
               <div className="flex-1 pt-0.5">

@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HealthCheckAnalyzingOverlay } from "@/components/health-check/HealthCheckAnalyzingOverlay";
 import { HealthCheckChoiceCard } from "@/components/health-check/HealthCheckChoiceCard";
 import { HealthCheckFormTeaser } from "@/components/health-check/HealthCheckFormTeaser";
+import { HealthCheckLogo } from "@/components/health-check/HealthCheckLogo";
 import { HealthCheckPrimaryButton } from "@/components/health-check/HealthCheckPrimaryButton";
 import { HealthCheckStepProgress } from "@/components/health-check/HealthCheckStepProgress";
 import {
@@ -87,6 +89,10 @@ export function HealthCheckForm() {
       ) : null}
 
       <div className="space-y-5 pb-8">
+        <Link href="/health-check" className="flex justify-center transition hover:opacity-80">
+          <HealthCheckLogo variant="header" />
+        </Link>
+
         <HealthCheckFormTeaser step={step} total={TOTAL_HEALTH_CHECK_STEPS} petName={petName || undefined} />
 
         <HealthCheckStepProgress

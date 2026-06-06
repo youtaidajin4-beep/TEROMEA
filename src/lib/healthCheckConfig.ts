@@ -29,4 +29,4 @@ export const HEALTH_CHECK_UPDATED_EVENT = "zutto-petto:health-check-updated";
  * 環境変数 NEXT_PUBLIC_LINE_OFFICIAL_URL で上書き可能
  */
 export const LINE_OFFICIAL_URL =
-  process.env.NEXT_PUBLIC_LINE_OFFICIAL_URL ?? "https://line.me/R/ti/p/@placeholder";
+  process.env.NEXT_PUBLIC_LINE_OFFICIAL_URL ?? "https://lin.ee/N3mpkAK";
