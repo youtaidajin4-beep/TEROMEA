@@ -1,5 +1,5 @@
 import { HealthCheckDisclaimer } from "@/components/HealthCheckDisclaimer";
-import { HealthCheckLogo } from "@/components/health-check/HealthCheckLogo";
+import { HealthCheckHero } from "@/components/health-check/HealthCheckHero";
 import { HealthCheckMysteryPreview } from "@/components/health-check/HealthCheckMysteryPreview";
 import { HealthCheckPrimaryButton } from "@/components/health-check/HealthCheckPrimaryButton";
 import { HealthCheckSectionCard } from "@/components/health-check/HealthCheckSectionCard";
@@ -13,26 +13,7 @@ const flowSteps = [
 export default function HealthCheckTopPage() {
   return (
     <div className="space-y-8 pb-8">
-      <section className="animate-fadeSlide space-y-5 text-center">
-        <div className="flex justify-center">
-          <HealthCheckLogo variant="hero" priority />
-        </div>
-        <p className="inline-flex rounded-full bg-mint/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-leaf">
-          無料 · 約1分
-        </p>
-        <h1 className="font-serif text-2xl font-bold leading-tight text-navy md:text-3xl">
-          うちの子の健康寿命を、
-          <br />
-          <span className="bg-gradient-to-r from-leaf to-emerald-600 bg-clip-text text-transparent">
-            毎日のケアへ。
-          </span>
-        </h1>
-        <p className="text-base leading-7 text-slate-600">
-          食事・運動・体重・便・元気度から、
-          <br />
-          <span className="font-semibold text-navy">あなただけの見守りレポート</span>が届きます。
-        </p>
-      </section>
+      <HealthCheckHero />
 
       <HealthCheckMysteryPreview className="animate-fadeSlide" />
 

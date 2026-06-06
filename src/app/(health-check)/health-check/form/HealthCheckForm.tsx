@@ -90,7 +90,7 @@ export function HealthCheckForm() {
 
       <div className="space-y-5 pb-8">
         <Link href="/health-check" className="flex justify-center transition hover:opacity-80">
-          <HealthCheckLogo variant="header" />
+          <HealthCheckLogo />
         </Link>
 
         <HealthCheckFormTeaser step={step} total={TOTAL_HEALTH_CHECK_STEPS} petName={petName || undefined} />
