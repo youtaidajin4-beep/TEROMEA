@@ -101,6 +101,12 @@ export default function Home() {
                 うちの子で体験する
               </Link>
               <Link
+                href="/health-check"
+                className="rounded-full bg-accent px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-orange-600"
+              >
+                健康寿命チェックを試す
+              </Link>
+              <Link
                 href="/insurance-dashboard"
                 className="rounded-full bg-white px-6 py-3 text-sm font-bold text-leaf ring-1 ring-emerald-100 transition hover:bg-mint"
               >
