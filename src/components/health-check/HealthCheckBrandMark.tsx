@@ -7,6 +7,7 @@ type HealthCheckBrandMarkProps = {
 export function HealthCheckBrandMark({ href }: HealthCheckBrandMarkProps) {
   const content = (
     <div className="text-center">
+      <div className="mx-auto mb-2 h-px w-12 bg-gradient-to-r from-transparent via-leaf/40 to-transparent" aria-hidden />
       <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
         <span className="h-1 w-1 rounded-full bg-leaf" aria-hidden />
         ZuttoPetto

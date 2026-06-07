@@ -5,12 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HealthCheckDisclaimer } from "@/components/HealthCheckDisclaimer";
 import { HealthCheckAnimatedScore } from "@/components/health-check/HealthCheckAnimatedScore";
-import { HealthCheckSectionCard } from "@/components/health-check/HealthCheckSectionCard";
+import { HealthCheckResultInsightPanel } from "@/components/health-check/HealthCheckResultInsightPanel";
+import { HealthCheckResultUnlockGrid } from "@/components/health-check/HealthCheckResultUnlockGrid";
 import { LINE_OFFICIAL_URL } from "@/lib/healthCheckConfig";
 import { getHealthCheckResultSnapshot, subscribeHealthCheckResult } from "@/lib/healthCheckClient";
 import type { HealthCheckResult } from "@/lib/healthCheck";
 
-type RevealPhase = "loading" | "score" | "content";
+type RevealPhase = "loading" | "score" | "unlock" | "content";
+
+const stagger = (delay: string): CSSProperties => ({
+  animationDelay: delay,
+  animationFillMode: "forwards"
+});
 
 export function HealthCheckResultView() {
   const router = useRouter();
@@ -30,11 +36,13 @@ export function HealthCheckResultView() {
   useEffect(() => {
     if (!result) return;
 
-    const scoreTimer = setTimeout(() => setPhase("score"), 600);
-    const contentTimer = setTimeout(() => setPhase("content"), 2200);
+    const scoreTimer = setTimeout(() => setPhase("score"), 300);
+    const unlockTimer = setTimeout(() => setPhase("unlock"), 2200);
+    const contentTimer = setTimeout(() => setPhase("content"), 3800);
 
     return () => {
       clearTimeout(scoreTimer);
+      clearTimeout(unlockTimer);
       clearTimeout(contentTimer);
     };
   }, [result]);
@@ -50,108 +58,143 @@ export function HealthCheckResultView() {
 
   const { insight } = result;
   const scoreTone = getScoreTone(result.score);
+  const petName = result.input.petName;
 
   return (
     <div className="space-y-6 pb-8">
-      {/* ヘッダー */}
-      <section className="animate-fadeSlide space-y-3 text-center">
-        <p className="inline-flex items-center gap-1.5 rounded-full bg-leaf/10 px-4 py-1.5 text-xs font-bold text-leaf">
-          <span>🎉</span> レポート完成
-        </p>
-        <h1 className="font-serif text-2xl font-bold text-navy">
-          {result.input.petName}ちゃんの
-          <br />
-          健康見守りレポート
-        </h1>
-        <span className="inline-flex rounded-full border border-leaf/20 bg-beige px-4 py-1.5 text-sm font-semibold text-navy">
-          {insight.lifeStage.label}
-        </span>
-      </section>
-
-      {/* スコア — カウントアップ演出 */}
+      {/* クライマックス：スコア演出 */}
       <section
-        className={`rounded-[1.75rem] border p-6 text-center shadow-card transition-all duration-700 ${scoreTone.bg} ${
-          phase === "loading" ? "opacity-50" : "opacity-100"
+        className={`relative overflow-hidden rounded-[2rem] border px-5 py-8 text-center shadow-card transition-all duration-700 ${scoreTone.bg} ${
+          phase === "loading" ? "opacity-60" : "opacity-100"
         }`}
       >
-        {phase !== "loading" ? (
-          <>
-            <HealthCheckAnimatedScore score={result.score} />
-            <p
-              className={`mt-5 inline-flex animate-popIn rounded-full px-5 py-2.5 text-sm font-bold ${scoreTone.badge}`}
-              style={{ animationDelay: "1.2s" }}
-            >
-              {result.typeLabel}
-            </p>
-          </>
-        ) : (
-          <div className="py-10">
-            <span className="animate-pulse text-4xl">📊</span>
-            <p className="mt-3 text-sm text-slate-500">スコアを表示しています…</p>
-          </div>
-        )}
+        <div className="pointer-events-none absolute -left-10 top-0 h-40 w-40 rounded-full bg-leaf/15 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -right-8 bottom-0 h-36 w-36 rounded-full bg-accent/10 blur-3xl" aria-hidden />
+
+        <div className="relative space-y-5">
+          {phase !== "loading" ? (
+            <div className="animate-fadeSlide space-y-2">
+              <p className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-4 py-1.5 text-xs font-bold text-leaf shadow-sm ring-1 ring-leaf/15">
+                <span aria-hidden>🎉</span>
+                レポート完成
+              </p>
+              <h1 className="font-serif text-2xl font-bold leading-tight text-navy">
+                <span className="text-leaf">{petName}ちゃん</span>だけの
+                <br />
+                健康見守りレポート
+              </h1>
+              <span className="inline-flex rounded-full border border-leaf/20 bg-white/70 px-4 py-1.5 text-sm font-semibold text-navy">
+                {insight.lifeStage.label}
+              </span>
+            </div>
+          ) : (
+            <div className="py-4">
+              <p className="animate-pulse font-serif text-lg font-bold text-navy">レポートを表示しています…</p>
+            </div>
+          )}
+
+          {phase !== "loading" ? (
+            <>
+              <HealthCheckAnimatedScore score={result.score} size="hero" delay={200} />
+              <p
+                className={`inline-flex animate-popIn rounded-full px-5 py-2.5 text-sm font-bold ${scoreTone.badge}`}
+                style={stagger("1.4s")}
+              >
+                {result.typeLabel}
+              </p>
+              <p className="text-sm leading-6 text-slate-600">{insight.lifeStage.description}</p>
+            </>
+          ) : (
+            <div className="py-8">
+              <span className="animate-pulse text-4xl">📊</span>
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* 以降 — 段階的に表示 */}
+      {/* アンロック演出：トップの MysteryPreview の回収 */}
+      <HealthCheckResultUnlockGrid
+        score={result.score}
+        typeLabel={result.typeLabel}
+        insight={insight}
+        visible={phase === "unlock" || phase === "content"}
+      />
+
+      {phase === "unlock" ? (
+        <p className="animate-pulse text-center text-sm font-medium text-leaf">レポートの詳細を展開しています…</p>
+      ) : null}
+
+      {/* 詳細レポート */}
       {phase === "content" ? (
         <div className="space-y-5">
-          <HealthCheckSectionCard
+          <HealthCheckResultInsightPanel
             eyebrow="いま伝えたいこと"
-            variant="highlight"
+            icon="💬"
+            variant="hero"
             className="animate-staggerIn opacity-0"
-            style={{ animationDelay: "0.1s", animationFillMode: "forwards" } as CSSProperties}
+            style={stagger("0.05s")}
           >
             <h3 className="font-serif text-xl font-bold leading-8 text-navy">{insight.hero.headline}</h3>
             <p className="mt-3 text-base leading-8 text-slate-700">{insight.hero.body}</p>
-          </HealthCheckSectionCard>
+          </HealthCheckResultInsightPanel>
 
-          <HealthCheckSectionCard
+          <HealthCheckResultInsightPanel
             eyebrow="いま一番意識したいこと"
+            icon="🎯"
             title={insight.focusArea.title}
+            variant="focus"
             className="animate-staggerIn opacity-0"
-            style={{ animationDelay: "0.25s", animationFillMode: "forwards" } as CSSProperties}
+            style={stagger("0.15s")}
           >
-            <p className="rounded-xl bg-mint/40 px-4 py-2 text-sm font-medium text-leaf">{insight.focusArea.whyNow}</p>
+            <p className="rounded-xl bg-mint/50 px-4 py-2.5 text-sm font-semibold text-leaf">{insight.focusArea.whyNow}</p>
             <p className="mt-3 text-base leading-8 text-slate-700">{insight.focusArea.insight}</p>
-          </HealthCheckSectionCard>
+          </HealthCheckResultInsightPanel>
 
           {insight.patternNote ? (
-            <HealthCheckSectionCard
-              eyebrow="💡 つながりのヒント"
+            <HealthCheckResultInsightPanel
+              eyebrow="つながりのヒント"
+              icon="🔗"
               title={insight.patternNote.title}
+              variant="pattern"
               className="animate-staggerIn opacity-0"
-              style={{ animationDelay: "0.4s", animationFillMode: "forwards" } as CSSProperties}
+              style={stagger("0.25s")}
             >
               <p className="text-base leading-8 text-slate-700">{insight.patternNote.body}</p>
-            </HealthCheckSectionCard>
+            </HealthCheckResultInsightPanel>
           ) : null}
 
-          <HealthCheckSectionCard
+          <HealthCheckResultInsightPanel
             eyebrow="今週のひとこと"
-            variant="accent"
+            icon="✨"
+            variant="action"
             className="animate-staggerIn opacity-0"
-            style={{ animationDelay: "0.55s", animationFillMode: "forwards" } as CSSProperties}
+            style={stagger("0.35s")}
           >
-            <p className="font-serif text-lg font-bold leading-8 text-navy">{insight.thisWeekAction}</p>
-          </HealthCheckSectionCard>
+            <p className="font-serif text-xl font-bold leading-8 text-navy">{insight.thisWeekAction}</p>
+            <p className="mt-2 text-sm text-slate-500">今日から試せる、小さな一歩です</p>
+          </HealthCheckResultInsightPanel>
 
-          <HealthCheckSectionCard
+          <HealthCheckResultInsightPanel
+            eyebrow="もっと深く知る"
+            icon="🧬"
             title="テロメア健康年齢チェック"
+            variant="default"
             className="animate-staggerIn opacity-0"
-            style={{ animationDelay: "0.7s", animationFillMode: "forwards" } as CSSProperties}
+            style={stagger("0.45s")}
           >
             <p className="text-base leading-7 text-slate-600">{result.telomereMessage}</p>
-          </HealthCheckSectionCard>
+          </HealthCheckResultInsightPanel>
 
-          <HealthCheckSectionCard
-            variant="highlight"
+          <HealthCheckResultInsightPanel
+            eyebrow="次のステップ"
+            icon="💚"
+            title="LINEで見守りを続ける"
+            variant="focus"
             className="animate-staggerIn opacity-0"
-            style={{ animationDelay: "0.85s", animationFillMode: "forwards" } as CSSProperties}
+            style={stagger("0.55s")}
           >
-            <h2 className="font-serif text-lg font-bold text-navy">LINEで続ける</h2>
-            <p className="mt-3 text-base leading-7 text-slate-600">
-              この結果をもとに、LINEで週1回の健康記録を続けてみましょう。
-              小さな変化を記録することで、うちの子の状態を見守りやすくなります。
+            <p className="text-base leading-7 text-slate-600">
+              この結果をもとに、LINEで週1回の健康記録を続けてみましょう。小さな変化を記録することで、うちの子の状態を見守りやすくなります。
             </p>
             <a
               href={LINE_OFFICIAL_URL}
@@ -162,19 +205,18 @@ export function HealthCheckResultView() {
               <span>LINE</span>
               <span>で健康記録を続ける</span>
             </a>
-          </HealthCheckSectionCard>
+          </HealthCheckResultInsightPanel>
 
           <Link
             href="/health-check/form"
-            className="flex w-full items-center justify-center rounded-full border border-slate-200 bg-white/90 px-6 py-4 text-base font-bold text-slate-600 transition hover:bg-beige"
+            className="animate-staggerIn flex w-full items-center justify-center rounded-full border border-slate-200 bg-white/90 px-6 py-4 text-base font-bold text-slate-600 opacity-0 transition hover:bg-beige"
+            style={stagger("0.65s")}
           >
             もう一度チェックする
           </Link>
 
           <HealthCheckDisclaimer variant="full" />
         </div>
-      ) : phase === "score" ? (
-        <p className="animate-pulse text-center text-sm font-medium text-leaf">レポートの詳細を読み込んでいます…</p>
       ) : null}
     </div>
   );
@@ -182,13 +224,13 @@ export function HealthCheckResultView() {
 
 function getScoreTone(score: number) {
   if (score >= 85) {
-    return { bg: "border-leaf/20 bg-mint/50", badge: "bg-leaf/15 text-leaf" };
+    return { bg: "border-leaf/25 bg-gradient-to-br from-mint/70 via-white/60 to-beige/40", badge: "bg-leaf/15 text-leaf" };
   }
   if (score >= 70) {
-    return { bg: "border-sky-100 bg-skysoft/40", badge: "bg-sky-100 text-sky-700" };
+    return { bg: "border-sky-100 bg-gradient-to-br from-skysoft/50 via-white/60 to-mint/30", badge: "bg-sky-100 text-sky-700" };
   }
   if (score >= 55) {
-    return { bg: "border-amber-100 bg-amber-50/60", badge: "bg-amber-100 text-amber-800" };
+    return { bg: "border-amber-100 bg-gradient-to-br from-amber-50/70 via-white/60 to-beige/40", badge: "bg-amber-100 text-amber-800" };
   }
-  return { bg: "border-orange-100 bg-orange-50/50", badge: "bg-accent/15 text-accent" };
+  return { bg: "border-orange-100 bg-gradient-to-br from-orange-50/60 via-white/60 to-beige/40", badge: "bg-accent/15 text-accent" };
 }

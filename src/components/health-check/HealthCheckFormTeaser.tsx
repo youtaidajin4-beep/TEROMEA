@@ -47,15 +47,26 @@ export function HealthCheckFormTeaser({ step, total, petName }: HealthCheckFormT
   const progress = ((step + 1) / total) * 100;
 
   return (
-    <div className="rounded-2xl border border-leaf/15 bg-gradient-to-r from-mint/50 to-white/80 px-4 py-3 backdrop-blur-sm">
-      <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-leaf/15 text-sm">
-          {progress >= 100 ? "🎉" : progress >= 80 ? "✨" : "🔍"}
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-navy">{headline}</p>
-          <p className="text-xs text-slate-500">{sub}</p>
+    <div className="overflow-hidden rounded-2xl border border-leaf/15 bg-gradient-to-r from-mint/50 to-white/80 backdrop-blur-sm">
+      <div className="px-4 py-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-leaf/15 text-sm">
+            {progress >= 100 ? "🎉" : progress >= 80 ? "✨" : "🔍"}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-navy">{headline}</p>
+            <p className="text-xs text-slate-500">{sub}</p>
+          </div>
+          <span className="shrink-0 rounded-full bg-beige px-2 py-0.5 text-[10px] font-bold text-navy">
+            {step + 1}/{total}
+          </span>
         </div>
+      </div>
+      <div className="h-1 bg-beige/60">
+        <div
+          className="h-full bg-gradient-to-r from-leaf to-emerald-500 transition-all duration-500 ease-out"
+          style={{ width: `${progress}%` }}
+        />
       </div>
     </div>
   );

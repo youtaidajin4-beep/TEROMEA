@@ -33,7 +33,9 @@ const config: Config = {
         shimmer: "shimmer 2.5s linear infinite",
         popIn: "popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards",
         staggerIn: "staggerIn 0.6s ease-out forwards",
-        glow: "glow 2s ease-in-out infinite"
+        glow: "glow 2s ease-in-out infinite",
+        unlockReveal: "unlockReveal 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards",
+        scoreBurst: "scoreBurst 0.7s ease-out forwards"
       },
       keyframes: {
         fadeSlide: {
@@ -67,6 +69,14 @@ const config: Config = {
         glow: {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "0.8" }
+        },
+        unlockReveal: {
+          "0%": { opacity: "0", transform: "scale(0.88) translateY(12px)" },
+          "100%": { opacity: "1", transform: "scale(1) translateY(0)" }
+        },
+        scoreBurst: {
+          "0%": { opacity: "0.6", transform: "scale(0.6)" },
+          "100%": { opacity: "0", transform: "scale(1.8)" }
         }
       }
     }
