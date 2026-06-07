@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HealthCheckAnalyzingOverlay } from "@/components/health-check/HealthCheckAnalyzingOverlay";
 import { HealthCheckChoiceCard } from "@/components/health-check/HealthCheckChoiceCard";
-import { HealthCheckFormTeaser } from "@/components/health-check/HealthCheckFormTeaser";
 import { HealthCheckBrandMark } from "@/components/health-check/HealthCheckBrandMark";
 import { HealthCheckPrimaryButton } from "@/components/health-check/HealthCheckPrimaryButton";
 import { HealthCheckStepProgress } from "@/components/health-check/HealthCheckStepProgress";
@@ -90,12 +89,11 @@ export function HealthCheckForm() {
       <div className="space-y-5 pb-8">
         <HealthCheckBrandMark href="/health-check" />
 
-        <HealthCheckFormTeaser step={step} total={TOTAL_HEALTH_CHECK_STEPS} petName={petName || undefined} />
-
         <HealthCheckStepProgress
           step={step}
           total={TOTAL_HEALTH_CHECK_STEPS}
           category={currentQuestion.category}
+          petName={petName || undefined}
           onBack={handleBack}
         />
 

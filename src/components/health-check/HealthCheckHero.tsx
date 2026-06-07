@@ -9,8 +9,6 @@ const careDimensions = [
   { icon: "✨", label: "元気" }
 ];
 
-const trustBadges = ["無料", "約1分", "11問"];
-
 export function HealthCheckHero() {
   return (
     <section className="animate-fadeSlide relative overflow-hidden rounded-[1.75rem] border border-leaf/20 bg-gradient-to-br from-mint/55 via-white/45 to-beige/55 px-5 py-7 shadow-card backdrop-blur-sm">
@@ -72,17 +70,6 @@ export function HealthCheckHero() {
               答えた内容から、<span className="font-bold text-leaf">うちの子だけ</span>のスコアが算出されます
             </p>
           </div>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-2">
-          {trustBadges.map((badge) => (
-            <span
-              key={badge}
-              className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-leaf ring-1 ring-leaf/15"
-            >
-              {badge}
-            </span>
-          ))}
         </div>
       </div>
     </section>
